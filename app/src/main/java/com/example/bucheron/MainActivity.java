@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.BatteryManager;
@@ -19,7 +18,6 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Date;
 
@@ -43,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         final TextView timerView = (TextView)findViewById(R.id.timerView);
-        TextView songView = (TextView)findViewById(R.id.songView);
-        TextView artistView = (TextView)findViewById(R.id.artistView);
         TextView dateView = (TextView)findViewById(R.id.dateView);
         LinearLayout songBox = (LinearLayout)findViewById(R.id.songBox);
 
@@ -62,20 +58,20 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.prevView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                skipPrevious();
+                MusicControl.skipPrevious(v.getContext());
             }
         });
 
         songBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                play();
+                MusicControl.play(v.getContext());
             }
         });
         findViewById(R.id.nextView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                skipNext();
+                MusicControl.skipNext(v.getContext());
             }
         });
 
@@ -119,9 +115,6 @@ public class MainActivity extends AppCompatActivity {
         iF.addAction("com.samsung.sec.android.MusicPlayer.metachanged");
         iF.addAction("com.andrew.apollo.metachanged");
 
-        songView.setText(getPreferenceValue("lastSong"));
-        artistView.setText(getPreferenceValue("lastArtist"));
-
         registerReceiver(this.mReceiver, iF);
 //        try {
 //            AudioManager manager = (AudioManager) this.getBaseContext().getSystemService(Context.AUDIO_SERVICE);
@@ -158,40 +151,6 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.minutesView).setVisibility(View.GONE);
             switchTimerClock.setImageResource(R.mipmap.icon_clock_foreground);
         }
-    }
-
-    private void play() {
-        sendButton(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
-    }
-
-    private void skipNext() {
-        sendButton(KeyEvent.KEYCODE_MEDIA_NEXT);
-    }
-
-    private void skipPrevious() {
-        sendButton(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
-    }
-
-    private void sendButton(int keycode) {
-        AudioManager am = (AudioManager) this.getBaseContext().getSystemService(Context.AUDIO_SERVICE);
-        KeyEvent downEvent = new KeyEvent(KeyEvent.ACTION_DOWN, keycode);
-        am.dispatchMediaKeyEvent(downEvent);
-        KeyEvent upEvent = new KeyEvent(KeyEvent.ACTION_UP, keycode);
-        am.dispatchMediaKeyEvent(upEvent);
-    }
-
-    public String getPreferenceValue(String myPref)
-    {
-        SharedPreferences sp = getSharedPreferences(myPref,0);
-        String str = sp.getString(myPref,"TheDefaultValueIfNoValueFoundOfThisKey");
-        return str;
-    }
-
-    public void writeToPreference(String myPref, String thePreference)
-    {
-        SharedPreferences.Editor editor = getSharedPreferences(myPref,0).edit();
-        editor.putString(myPref, thePreference);
-        editor.commit();
     }
 
     private Runnable updateTimerThread = new Runnable() {
@@ -263,16 +222,13 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String artist = intent.getStringExtra("artist");
-            String album = intent.getStringExtra("album");
+//            String album = intent.getStringExtra("album");
             String track = intent.getStringExtra("track");
 
             TextView songView = (TextView)findViewById(R.id.songView);
             songView.setText(track);
             TextView artistView = (TextView)findViewById(R.id.artistView);
             artistView.setText(artist);
-
-            writeToPreference("lastSong", track);
-            writeToPreference("lastArtist", artist);
         }
     };
 
