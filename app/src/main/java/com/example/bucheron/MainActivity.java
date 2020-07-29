@@ -7,12 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
-import android.media.AudioManager;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -101,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
         myThread.start();
 
         IntentFilter iF = new IntentFilter();
+        iF.addAction("com.spotify.music.playbackstatechanged");
+        iF.addAction("com.spotify.music.metadatachanged");
+        iF.addAction("com.spotify.music.queuechanged");
         iF.addAction("com.android.music.metachanged");
         iF.addAction("com.android.music.playstatechanged");
         iF.addAction("com.htc.music.metachanged");
@@ -218,7 +219,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String artist = intent.getStringExtra("artist");
@@ -233,7 +233,6 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private BroadcastReceiver mBatteryReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);

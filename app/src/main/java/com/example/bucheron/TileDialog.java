@@ -9,7 +9,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class TileDialog {
 
@@ -33,6 +32,7 @@ public class TileDialog {
                         futurDate.setTimeInMillis(System.currentTimeMillis());
                         futurDate.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         futurDate.set(Calendar.MINUTE, minute);
+                        futurDate.set(Calendar.SECOND, 0);
 
                         Intent intent = new Intent(context, AlarmAction.class);
                         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -43,27 +43,6 @@ public class TileDialog {
                 }, mHour, mMinute, false);
 
         return timePickerDialog;
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-//        builder.setTitle("Alarm");
-//        Random random = new Random();
-//        builder.setMessage(Constants.facts[random.nextInt(6)]);
-//        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//
-//                dialogInterface.dismiss();
-//            }
-//        });
-//
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-//            @Override
-//            public void onClick(DialogInterface dialogInterface, int i) {
-//                dialogInterface.dismiss();
-//            }
-//        });
-//
-//        return builder.create();
     }
 }
 
