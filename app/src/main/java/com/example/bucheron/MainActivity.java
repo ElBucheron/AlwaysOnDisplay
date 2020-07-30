@@ -1,13 +1,20 @@
 package com.example.bucheron;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -18,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
