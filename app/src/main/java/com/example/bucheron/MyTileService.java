@@ -20,6 +20,12 @@ public class MyTileService extends TileService {
     @Override
     public void onStartListening() {
         Tile tile = getQsTile();
+
+        // Update state
+        tile.setState(Tile.STATE_INACTIVE);
+
+        // Update looks
+        tile.updateTile();
     }
 
     @Override

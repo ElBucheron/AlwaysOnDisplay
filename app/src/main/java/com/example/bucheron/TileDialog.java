@@ -42,15 +42,18 @@ public class TileDialog {
                         futurDate.set(Calendar.SECOND, 0);
 
                         // For a time to set for the next day
-                        if ((Calendar.getInstance().getTimeInMillis() - futurDate.getTimeInMillis()) > 0 ){
-                            futurDate.set(Calendar.DAY_OF_MONTH, futurDate.getTime().getDay() + 1);
+                        long timeUntilTrigger;
+                        if (System.currentTimeMillis() > futurDate.getTimeInMillis()){
+                            timeUntilTrigger = futurDate.getTimeInMillis() + 86400000;
+                        }else{
+                            timeUntilTrigger = futurDate.getTimeInMillis();
                         }
 
                         Intent intent = new Intent(context, AlarmAction.class);
                         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, futurDate.getTimeInMillis(), sender);
+                        am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeUntilTrigger, sender);
 
-//                        createNotificationChannel(context);
+                        createNotificationChannel(context);
                         showNotification(context, hourOfDay, minute);
 
                         Toast.makeText(context, "Alarm set for " + hourOfDay + ":" + minute, Toast.LENGTH_LONG).show();
